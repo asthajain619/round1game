@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Video Unlock</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative; /* Important for absolute logo positioning */
+    }
+
+    .logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 60px;
+      height: auto;
+      z-index: 999;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    .page { display: none; }
+    .active { display: block; }
+
+    input, button {
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      width: 80%;
+      border: none;
+      border-radius: 10px;
+      outline: none;
+    }
+
+    input {
+      background-color: #ffffff;
+      color: #333;
+    }
+
+    button {
+      background-color: #00d4ff;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #00a3cc;
+    }
+
+    a {
+      display: inline-block;
+      margin: 10px 0;
+      font-size: 18px;
+      color: #ffffff;
+      text-decoration: underline;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .error {
+      color: #ff4c4c;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGO (Base64 Embedded) -->
+  <img src="data:image/png;base64,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" alt="Logo" class="logo" />
+
+  <div class="container">
+    <!-- Page 1: Team Name -->
+    <div id="page1" class="page active">
+      <h2>Enter Your Team Name</h2>
+      <input type="text" id="teamName" placeholder="Team Name">
+      <button onclick="goToPage(2)">Next</button>
+    </div>
+
+    <!-- Page 2: First Video Link -->
+    <div id="page2" class="page">
+      <h2>Watch this video</h2>
+      <a href="https://example.com/video1" target="_blank">Video 1 Link</a>
+      <button onclick="goToPage(3)">Next</button>
+    </div>
+
+    <!-- Page 3: Password for Video 2 -->
+    <div id="page3" class="page">
+      <h2>Enter Password to Unlock Next Video</h2>
+      <input type="password" id="password1" placeholder="Enter password">
+      <button onclick="checkPassword('password1', 'secret1', 4, 'error1')">Submit</button>
+      <p id="error1" class="error"></p>
+    </div>
+
+    <!-- Page 4: Second Video -->
+    <div id="page4" class="page">
+      <h2>Second Video</h2>
+      <a href="https://example.com/video2" target="_blank">Video 2 Link</a>
+      <button onclick="goToPage(5)">Next</button>
+    </div>
+
+    <!-- Page 5: Password for Video 3 -->
+    <div id="page5" class="page">
+      <h2>Enter Password to Unlock Final Video</h2>
+      <input type="password" id="password2" placeholder="Enter password">
+      <button onclick="checkPassword('password2', 'secret2', 6, 'error2')">Submit</button>
+      <p id="error2" class="error"></p>
+    </div>
+
+    <!-- Page 6: Third Video -->
+    <div id="page6" class="page">
+      <h2>Final Video</h2>
+      <a href="https://example.com/video3" target="_blank">Video 3 Link</a>
+      <button onclick="goToPage(7)">Next</button>
+    </div>
+
+    <!-- Page 7: Google Form -->
+    <div id="page7" class="page">
+      <h2>Final Step</h2>
+      <a href="https://forms.gle/your-google-form-link" target="_blank">Go to Google Form</a>
+    </div>
+  </div>
+
+  <script>
+    function goToPage(pageNum) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(`page${pageNum}`).classList.add('active');
+    }
+
+    function checkPassword(inputId, correctPassword, nextPage, errorId) {
+      const input = document.getElementById(inputId).value;
+      const errorEl = document.getElementById(errorId);
+      if (input === correctPassword) {
+        errorEl.textContent = "";
+        goToPage(nextPage);
+      } else {
+        errorEl.textContent = "Incorrect password. Please try again.";
+      }
+    }
+  </script>
+
+</body>
+</html>
